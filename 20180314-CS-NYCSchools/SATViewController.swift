@@ -18,6 +18,7 @@ class SATViewController: UIViewController {
     @IBOutlet weak var writingLabel: UILabel!
     
     @IBAction func closeButtonPress(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,6 +44,8 @@ class SATViewController: UIViewController {
         DispatchQueue.global(qos: .background).async {
             //format sql api query where the data has the same school name as the selected school
             guard let url = URL(string:"https://data.cityofnewyork.us/resource/734v-jeq5.json?$where=school_name%20like%20"+schoolName.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)!) else{
+                //dismiss the view controller since there is no data to display
+                self.dismiss(animated: true, completion: nil)
                 return
             }
             let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
@@ -53,6 +56,7 @@ class SATViewController: UIViewController {
                     //log error
                     print("Error: \(String(describing: error))")
                     //pop alert to allow user to attempt to reload the data
+                    self.dismiss(animated: true, completion: nil)
                     return
                 }
                 //I considered using the decodable to parse the json but it seemed over the top
@@ -60,6 +64,7 @@ class SATViewController: UIViewController {
                 print(json as Any)
                 if let schoolInfoArray = json as? [Dictionary<String,String>] {
                     if schoolInfoArray.count == 0{
+                        self.dismiss(animated: true, completion: nil)
                         return
                     }
                     let schoolInfoDict = schoolInfoArray[0]
@@ -77,7 +82,9 @@ class SATViewController: UIViewController {
                         self.mathLabel.isHidden = false
                         self.writingLabel.isHidden = false
                     }
-                    
+                }
+                else{
+                    self.dismiss(animated: true, completion: nil)
                 }
             }
             task.resume()
