@@ -20,7 +20,7 @@ class MainTableViewController: UITableViewController {
     
     func setUpView()  {
         //add spinner
-        spinner = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+        spinner = UIActivityIndicatorView(activityIndicatorStyle: .gray)
         spinner.frame = CGRect(x: self.view.center.x, y:self.view.center.y, width: 20.0, height: 20.0)
         spinner.startAnimating()
         self.view.addSubview(spinner)
